@@ -9,7 +9,7 @@ var Castle = require('../lib/');
 describe('Castle', function() {
   var analytics;
   var castle;
-  var options = { appId: 123456789012345 };
+  var options = { publishableKey: 'pk_123456789012345' };
 
   beforeEach(function() {
     analytics = new Analytics();
@@ -28,8 +28,8 @@ describe('Castle', function() {
 
   it('should have the correct settings', function() {
     analytics.compare(Castle, integration('Castle')
-    .option('appId', '')
-    .tag('<script src="//d2t77mnxyo7adj.cloudfront.net/v1/c.js">'));
+    .option('publishableKey', '')
+    .tag('<script src="//d2t77mnxyo7adj.cloudfront.net/v1/cs.js">'));
   });
 
   it('should load lib from CDN', function(done) {
@@ -43,7 +43,7 @@ describe('Castle', function() {
 
     it('should push credentials to _castle queue', function() {
       analytics.initialize();
-      analytics.deepEqual(window._castle.q, [['setAppId', options.appId]]);
+      analytics.deepEqual(window._castle.q, [['setKey', options.publishableKey]]);
     });
 
     it('should call load', function() {
@@ -82,6 +82,35 @@ describe('Castle', function() {
         });
 
         analytics.called(window._castle, 'identify', 'id', userProperties);
+      });
+    });
+
+    describe('page', function() {
+      beforeEach(function() {
+        analytics.spy(window, '_castle');
+      });
+
+      it('should call _castle#page', function() {
+        analytics.page('Category', 'Name');
+        analytics.called(window._castle, 'page');
+      });
+    });
+
+    describe('track', function() {
+      beforeEach(function() {
+        analytics.spy(window, '_castle');
+      });
+
+      it('should call _castle#track', function() {
+        var eventName = 'Event';
+        var eventProperties = { prop: true };
+        analytics.track(eventName, eventProperties);
+        analytics.called(
+          window._castle,
+          'track',
+          eventName,
+          eventProperties
+        );
       });
     });
   });
