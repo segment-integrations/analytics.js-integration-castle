@@ -9,7 +9,11 @@ var Castle = require('../lib/');
 describe('Castle', function() {
   var analytics;
   var castle;
-  var options = { publishableKey: 'pk_123456789012345' };
+  var options = {
+    publishableKey: 'pk_123456789012345',
+    cookieDomain: 'example.com',
+    autoPageview: false
+  };
 
   beforeEach(function() {
     analytics = new Analytics();
@@ -29,6 +33,8 @@ describe('Castle', function() {
   it('should have the correct settings', function() {
     analytics.compare(Castle, integration('Castle')
     .option('publishableKey', '')
+    .option('autoPageview', true)
+    .option('cookieDomain', undefined)
     .tag('<script src="//d2t77mnxyo7adj.cloudfront.net/v1/cs.js">'));
   });
 
@@ -41,9 +47,13 @@ describe('Castle', function() {
       analytics.spy(castle, 'load');
     });
 
-    it('should push credentials to _castle queue', function() {
+    it('should push options to _castle queue', function() {
       analytics.initialize();
-      analytics.deepEqual(window._castle.q, [['setKey', options.publishableKey]]);
+      analytics.deepEqual(window._castle.q, [
+        ['setKey', options.publishableKey ],
+        ['setCookieDomain', options.cookieDomain ],
+        ['autoTrack', options.autoPageview ]
+      ]);
     });
 
     it('should call load', function() {
