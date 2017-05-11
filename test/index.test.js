@@ -94,6 +94,12 @@ describe('Castle', function() {
         analytics.page('Category', 'Name');
         analytics.called(window._castle, 'page');
       });
+
+      it('shouldn\'t call _castle#page when autoTracking is enabled', function() {
+        castle.options.autoPageview = true;
+        analytics.page('Category', 'Name');
+        analytics.didNotCall(window._castle, 'page');
+      });
     });
 
     describe('track', function() {
