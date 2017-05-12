@@ -33,8 +33,8 @@ describe('Castle', function() {
   it('should have the correct settings', function() {
     analytics.compare(Castle, integration('Castle')
     .option('publishableKey', '')
-    .option('autoPageview', true)
-    .option('cookieDomain', undefined)
+    .option('autoPageview', false)
+    .option('cookieDomain', false)
     .tag('<script src="//d2t77mnxyo7adj.cloudfront.net/v1/cs.js">'));
   });
 
