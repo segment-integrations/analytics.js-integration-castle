@@ -45,15 +45,25 @@ describe('Castle', function() {
   describe('initialize', function() {
     beforeEach(function() {
       analytics.spy(castle, 'load');
+      analytics.spy(window, '_castle');
     });
 
     it('should push options to _castle queue', function() {
       analytics.initialize();
       analytics.deepEqual(window._castle.q, [
-        ['setKey', options.publishableKey ],
-        ['setCookieDomain', options.cookieDomain ],
-        ['autoTrack', options.autoPageview ]
+        ['setKey', options.publishableKey],
+        ['setCookieDomain', options.cookieDomain],
+        ['autoTrack', options.autoPageview]
       ]);
+    });
+
+    it('should check if userId is cached and call `.identify()`', function() {
+      var userId = 'wallin';
+      var traits = { name: 'wallin' };
+
+      analytics.identify(userId, traits);
+      analytics.initialize();
+      analytics.called(window._castle, 'identify', userId, traits);
     });
 
     it('should call load', function() {
