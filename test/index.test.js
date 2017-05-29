@@ -28,6 +28,7 @@ describe('Castle', function() {
     analytics.reset();
     castle.reset();
     sandbox();
+    window._castle = null; // for some reason unit tests having race condition issues where there are still stuff on this object
   });
 
   it('should have the correct settings', function() {
@@ -45,30 +46,40 @@ describe('Castle', function() {
   describe('initialize', function() {
     beforeEach(function() {
       analytics.spy(castle, 'load');
-      analytics.spy(window, '_castle');
     });
 
     it('should push options to _castle queue', function() {
       analytics.initialize();
       analytics.deepEqual(window._castle.q, [
-        ['setKey', options.publishableKey],
-        ['setCookieDomain', options.cookieDomain],
-        ['autoTrack', options.autoPageview]
+        ['setKey', options.publishableKey ],
+        ['setCookieDomain', options.cookieDomain ],
+        ['autoTrack', options.autoPageview ]
       ]);
-    });
-
-    it('should check if userId is cached and call `.identify()`', function() {
-      var userId = 'wallin';
-      var traits = { name: 'wallin' };
-
-      analytics.identify(userId, traits);
-      analytics.initialize();
-      analytics.called(window._castle, 'identify', userId, traits);
     });
 
     it('should call load', function() {
       analytics.initialize();
       analytics.called(castle.load);
+    });
+
+    describe('cache', function() {
+      var userId;
+      var traits;
+
+      beforeEach(function(done) {
+        userId = '123';
+        traits = { rick: 'morty' };
+        analytics.user().id(userId);
+        analytics.user().traits(traits);
+        analytics.stub(window, '_castle');
+        done();
+      });
+
+      it('should check cache for userId and traits', function() {
+        analytics.initialize();
+        analytics.called(window._castle, 'setUserId', userId);
+        analytics.called(window._castle, 'setUser', traits);
+      });
     });
   });
 
