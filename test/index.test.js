@@ -28,6 +28,7 @@ describe('Castle', function() {
     analytics.reset();
     castle.reset();
     sandbox();
+    window._castle = null;
   });
 
   it('should have the correct settings', function() {
@@ -92,6 +93,16 @@ describe('Castle', function() {
         });
 
         analytics.called(window._castle, 'identify', 'id', userProperties);
+      });
+
+      it('should check if userId is cached and call `.setUserId()`', function() {
+        var userId = 'wallin';
+        var traits = { name: 'wallin' };
+
+        analytics.identify(userId, traits);
+        analytics.initialize();
+        analytics.called(window._castle, 'setUserId', userId);
+        analytics.called(window._castle, 'setUser', traits);
       });
     });
 
