@@ -1,5 +1,5 @@
 # analytics.js-integration-castle
-[![CircleCI](https://circleci.com/gh/segment-integrations/analytics.js-integration-castle/tree/master.svg?style=svg)](https://circleci.com/gh/segment-integrations/analytics.js-integration-castle/tree/master)
+[![CircleCI](https://circleci.com/gh/segment-integrations/analytics.js-integration-castle.svg?style=svg)](https://circleci.com/gh/segment-integrations/analytics.js-integration-castle)
 
 Castle integration for [Analytics.js][].
 
