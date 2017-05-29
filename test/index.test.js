@@ -28,6 +28,7 @@ describe('Castle', function() {
     analytics.reset();
     castle.reset();
     sandbox();
+    window._castle = null; // for some reason unit tests having race condition issues where there are still stuff on this object
   });
 
   it('should have the correct settings', function() {
@@ -59,6 +60,26 @@ describe('Castle', function() {
     it('should call load', function() {
       analytics.initialize();
       analytics.called(castle.load);
+    });
+
+    describe('cache', function() {
+      var userId;
+      var traits;
+
+      beforeEach(function(done) {
+        userId = '123';
+        traits = { rick: 'morty' };
+        analytics.user().id(userId);
+        analytics.user().traits(traits);
+        analytics.stub(window, '_castle');
+        done();
+      });
+
+      it('should check cache for userId and traits', function() {
+        analytics.initialize();
+        analytics.called(window._castle, 'setUserId', userId);
+        analytics.called(window._castle, 'setUser', traits);
+      });
     });
   });
 
