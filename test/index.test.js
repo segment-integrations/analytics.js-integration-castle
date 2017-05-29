@@ -111,7 +111,7 @@ describe('Castle', function() {
         analytics.didNotCall(window._castle, 'page');
       });
 
-     it('should check if userId is cached and call `.setUserId()`', function() {
+      it('should check if userId is cached and call `.setUserId()`', function() {
         var userId = 'wallin';
         var traits = { name: 'wallin' };
 
@@ -138,12 +138,13 @@ describe('Castle', function() {
           eventProperties
         );
       });
-     it('should check if userId is cached and call `.setUserId()`', function() {
+
+      it('should check if userId is cached and call `.setUserId()`', function() {
         var userId = 'wallin';
         var traits = { name: 'wallin' };
 
         analytics.identify(userId, traits);
-        analytics.page();
+        analytics.track();
         analytics.called(window._castle, 'setUserId', userId);
         analytics.called(window._castle, 'setUser', traits);
       });
