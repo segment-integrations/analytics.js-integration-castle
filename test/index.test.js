@@ -71,14 +71,18 @@ describe('Castle', function() {
         traits = { rick: 'morty' };
         analytics.user().id(userId);
         analytics.user().traits(traits);
-        analytics.stub(window, '_castle');
         done();
       });
 
       it('should check cache for userId and traits', function() {
         analytics.initialize();
-        analytics.called(window._castle, 'setUserId', userId);
-        analytics.called(window._castle, 'setUser', traits);
+        analytics.deepEqual(window._castle.q, [
+          ['setKey', options.publishableKey ],
+          ['setCookieDomain', options.cookieDomain ],
+          ['autoTrack', options.autoPageview ],
+          ['setUserId', userId ],
+          ['setUser', traits ]
+        ]);
       });
     });
   });
