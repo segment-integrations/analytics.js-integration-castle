@@ -118,6 +118,16 @@ describe('Castle', function() {
 
         analytics.called(window._castle, 'identify', 'id', userProperties);
       });
+
+      it('should call _castle with secure option, if provided', function() {
+        var secureHash = 'abcdf';
+        analytics.identify('id',
+          { email: 'young@fathers.com' },
+          { integrations: { Castle: { secure: secureHash } } }
+        );
+
+        analytics.called(window._castle, 'secure', secureHash);
+      });
     });
 
     describe('page', function() {
