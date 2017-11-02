@@ -74,14 +74,13 @@ describe('Castle', function() {
         done();
       });
 
-      it('should check cache for userId and traits', function() {
+      it('should fetch userId and traits from cache', function() {
         analytics.initialize();
         analytics.deepEqual(window._castle.q, [
           ['setKey', options.publishableKey ],
           ['setCookieDomain', options.cookieDomain ],
           ['autoTrack', options.autoPageview ],
-          ['setUserId', userId ],
-          ['setUser', traits ]
+          ['identify', userId, traits ]
         ]);
       });
     });
