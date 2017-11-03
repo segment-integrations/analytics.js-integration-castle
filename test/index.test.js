@@ -62,7 +62,7 @@ describe('Castle', function() {
       analytics.called(castle.load);
     });
 
-    describe('cache', function() {
+    describe('with cache', function() {
       var userId;
       var traits;
 
@@ -74,13 +74,64 @@ describe('Castle', function() {
         done();
       });
 
-      it('should fetch userId and traits from cache', function() {
+      it('should identify with userId and traits', function() {
         analytics.initialize();
         analytics.deepEqual(window._castle.q, [
           ['setKey', options.publishableKey ],
           ['setCookieDomain', options.cookieDomain ],
           ['autoTrack', options.autoPageview ],
           ['identify', userId, traits ]
+        ]);
+      });
+    });
+
+
+    describe('with empty userId', function() {
+      var userId;
+
+      beforeEach(function(done) {
+        userId = '';
+        analytics.user().id(userId);
+        done();
+      });
+
+      it('should not identify', function() {
+        analytics.initialize();
+        analytics.deepEqual(window._castle.q, [
+          ['setKey', options.publishableKey ],
+          ['setCookieDomain', options.cookieDomain ],
+          ['autoTrack', options.autoPageview ],
+        ]);
+      });
+    });
+
+    describe('with empty traits', function() {
+      var userId;
+
+      beforeEach(function(done) {
+        userId = '123';
+        analytics.user().id(userId);
+        done();
+      });
+
+      it('should identify with userId and traits', function() {
+        analytics.initialize();
+        analytics.deepEqual(window._castle.q, [
+          ['setKey', options.publishableKey ],
+          ['setCookieDomain', options.cookieDomain ],
+          ['autoTrack', options.autoPageview ],
+          ['identify', userId, {} ]
+        ]);
+      });
+    });
+
+    describe('without cache', function() {
+      it('should not identify', function() {
+        analytics.initialize();
+        analytics.deepEqual(window._castle.q, [
+          ['setKey', options.publishableKey ],
+          ['setCookieDomain', options.cookieDomain ],
+          ['autoTrack', options.autoPageview ]
         ]);
       });
     });
