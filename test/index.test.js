@@ -100,7 +100,7 @@ describe('Castle', function() {
         analytics.deepEqual(window._castle.q, [
           ['setKey', options.publishableKey ],
           ['setCookieDomain', options.cookieDomain ],
-          ['autoTrack', options.autoPageview ],
+          ['autoTrack', options.autoPageview ]
         ]);
       });
     });
